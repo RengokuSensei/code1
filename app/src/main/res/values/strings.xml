@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">EBookReader</string>
+    <string name="browse">Browse</string>
+    <string name="notes">Notes</string>
+    <string name="view_notes">View Notes</string>
+    <string name="annotate">Annotate</string>
+    <string name="view_mind_map">View Mind Map</string>
+    <string name="add_note">Add Note</string>
+    <string name="summarize_notes">Summarize Notes</string>
+    <string name="save_note">Save Note</string>
+    <string name="enter_your_note">Enter your note</string>
+    <string name="add_annotation">Add Annotation</string>
+    <string name="add">Add</string>
+    <string name="cancel">Cancel</string>
+    <string name="note_summary">Note Summary</string>
+    <string name="ok">OK</string>
+    <string name="annotation_mode_enabled">Annotation mode enabled</string>
+    <string name="annotation_mode_disabled">Annotation mode disabled</string>
+    <string name="error_saving_annotations">Error saving annotations</string>
+    <string name="error_loading_annotations">Error loading annotations</string>
+    <string name="error_saving_highlight">Error saving highlight</string>
+    <string name="error_loading_highlights">Error loading highlights</string>
+    <string name="error_saving_note">Error saving note</string>
+    <string name="error_loading_notes">Error loading notes</string>
+</resources>
