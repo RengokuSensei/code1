@@ -9,8 +9,17 @@ import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.FileReader
 
+/**
+ * This activity displays a mind map generated from the notes of a specific book.
+ * It uses a WebView to render the mind map using the markmap-autoloader.js library.
+ */
 class MindMapActivity : AppCompatActivity() {
 
+    /**
+     * Initializes the activity, sets up the WebView, and loads the mind map data.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle). Otherwise it is null.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_mind_map)
@@ -47,6 +56,12 @@ class MindMapActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Loads the list of notes for a specific book from a JSON file.
+     *
+     * @param bookTitle The title of the book for which to load the notes.
+     * @return A list of Note objects. Returns an empty list if the file doesn't exist or an error occurs.
+     */
     private fun loadNotes(bookTitle: String): List<Note> {
         try {
             val file = File(filesDir, "${Utils.sha256(bookTitle)}_notes.json")

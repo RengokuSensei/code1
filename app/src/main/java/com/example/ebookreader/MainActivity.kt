@@ -19,6 +19,11 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
+/**
+ * The main entry point of the application.
+ * This activity displays a list of recent and asset-based books. It allows users to browse for new books from their device.
+ * It also handles the opening of EPUB and PDF files and manages highlights and recent book lists.
+ */
 class MainActivity : AppCompatActivity() {
 
     private val PREFS_NAME = "EBookReaderPrefs"
@@ -50,6 +55,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Initializes the activity, sets up the RecyclerView for books, and handles UI interactions.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle). Otherwise it is null.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -95,6 +105,9 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Opens the system's file picker to allow the user to select an EPUB or PDF file.
+     */
     private fun openFilePicker() {
         val intent = Intent(Intent.ACTION_OPEN_DOCUMENT)
         intent.addCategory(Intent.CATEGORY_OPENABLE)
@@ -104,6 +117,11 @@ class MainActivity : AppCompatActivity() {
         filePickerLauncher.launch(intent)
     }
 
+    /**
+     * Saves a highlight to a JSON file specific to the book.
+     *
+     * @param highlight The highlight object to be saved.
+     */
     private fun saveHighlight(highlight: HighLight) {
         val highlights = loadHighlights(highlight.bookId).toMutableList()
         highlights.add(highlight)
@@ -120,6 +138,12 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Loads highlights for a specific book from its JSON file.
+     *
+     * @param bookId The unique identifier for the book.
+     * @return A list of HighLight objects. Returns an empty list if the file doesn't exist or an error occurs.
+     */
     private fun loadHighlights(bookId: String): List<HighLight> {
         try {
             val file = File(filesDir, "${Utils.sha256(bookId)}_highlights.json")
@@ -135,12 +159,22 @@ class MainActivity : AppCompatActivity() {
         return emptyList()
     }
 
+    /**
+     * Saves the list of recent books to SharedPreferences.
+     *
+     * @param books The list of books to be saved.
+     */
     private fun saveRecentBooks(books: List<Book>) {
         val gson = Gson()
         val json = gson.toJson(books)
         prefs.edit().putString(RECENT_BOOKS_KEY, json).apply()
     }
 
+    /**
+     * Loads the list of recent books from SharedPreferences.
+     *
+     * @return A list of recent Book objects. Returns an empty list if no recent books are found.
+     */
     private fun loadRecentBooks(): List<Book> {
         val gson = Gson()
         val json = prefs.getString(RECENT_BOOKS_KEY, null)
@@ -152,6 +186,13 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Adds a book to the top of the recent books list.
+     * If the book is already in the list, it is not added again.
+     * The list is capped at a maximum size defined by `MAX_RECENT_BOOKS`.
+     *
+     * @param book The book to be added.
+     */
     private fun addRecentBook(book: Book) {
         if (!recentBooks.contains(book)) {
             recentBooks.add(0, book)
