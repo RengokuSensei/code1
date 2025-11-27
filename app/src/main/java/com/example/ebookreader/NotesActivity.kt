@@ -13,12 +13,21 @@ import com.google.gson.reflect.TypeToken
 import java.io.File
 import java.io.FileReader
 
+/**
+ * This activity displays a list of notes for a specific book.
+ * It allows the user to add new notes, view a summary of existing notes, and generate a mind map.
+ */
 class NotesActivity : AppCompatActivity() {
 
     private lateinit var recyclerView: RecyclerView
     private lateinit var notesAdapter: NotesAdapter
     private var bookTitle: String? = null
 
+    /**
+     * Initializes the activity, sets up the RecyclerView for notes, and handles UI interactions.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle). Otherwise it is null.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_notes)
@@ -53,11 +62,18 @@ class NotesActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Called when the activity will start interacting with the user.
+     * This is a good place to begin animations, open exclusive-access devices (such as the camera), etc.
+     */
     override fun onResume() {
         super.onResume()
         loadNotes()
     }
 
+    /**
+     * Loads the notes for the current book and updates the RecyclerView.
+     */
     private fun loadNotes() {
         if (bookTitle != null) {
             val notes = loadNotesFromFile(bookTitle!!)
@@ -65,6 +81,12 @@ class NotesActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * Loads the list of notes for a specific book from a JSON file.
+     *
+     * @param bookTitle The title of the book for which to load the notes.
+     * @return A list of Note objects. Returns an empty list if the file doesn't exist or an error occurs.
+     */
     private fun loadNotesFromFile(bookTitle: String): List<Note> {
         try {
             val file = File(filesDir, "${Utils.sha256(bookTitle)}_notes.json")

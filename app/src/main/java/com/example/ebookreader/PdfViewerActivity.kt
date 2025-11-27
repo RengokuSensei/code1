@@ -19,6 +19,11 @@ import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
 
+/**
+ * This activity is responsible for displaying PDF documents and handling annotations.
+ * It uses the AndroidPdfViewer library to render the PDF and provides functionality
+ * for adding, displaying, and saving annotations.
+ */
 class PdfViewerActivity : AppCompatActivity(), OnDrawListener, OnTapListener {
 
     private lateinit var pdfView: PDFView
@@ -27,6 +32,11 @@ class PdfViewerActivity : AppCompatActivity(), OnDrawListener, OnTapListener {
     private var bookTitle: String? = null
     private var annotationMode = false
 
+    /**
+     * Initializes the activity, sets up the PDF viewer, loads the document, and handles UI interactions.
+     *
+     * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data it most recently supplied in onSaveInstanceState(Bundle). Otherwise it is null.
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_pdf_viewer)
@@ -66,6 +76,14 @@ class PdfViewerActivity : AppCompatActivity(), OnDrawListener, OnTapListener {
         }
     }
 
+    /**
+     * Called when a layer is drawn on the PDF view. This is used to draw the annotations on the canvas.
+     *
+     * @param canvas The canvas on which to draw.
+     * @param pageWidth The width of the page.
+     * @param pageHeight The height of the page.
+     * @param displayedPage The index of the currently displayed page.
+     */
     override fun onLayerDrawn(canvas: Canvas?, pageWidth: Float, pageHeight: Float, displayedPage: Int) {
         val paint = Paint()
         paint.color = Color.RED
@@ -77,6 +95,12 @@ class PdfViewerActivity : AppCompatActivity(), OnDrawListener, OnTapListener {
         }
     }
 
+    /**
+     * Called when the user taps on the PDF view. If in annotation mode, it triggers the annotation dialog.
+     *
+     * @param event The MotionEvent object containing full information about the event.
+     * @return True if the event was handled, false otherwise.
+     */
     override fun onTap(event: android.view.MotionEvent?): Boolean {
         if (annotationMode && event != null) {
             showAnnotationDialog(event.x, event.y)
@@ -84,6 +108,12 @@ class PdfViewerActivity : AppCompatActivity(), OnDrawListener, OnTapListener {
         return true
     }
 
+    /**
+     * Displays a dialog to get the text for a new annotation.
+     *
+     * @param x The x-coordinate of the tap event.
+     * @param y The y-coordinate of the tap event.
+     */
     private fun showAnnotationDialog(x: Float, y: Float) {
         val editText = EditText(this)
         AlertDialog.Builder(this)
@@ -101,6 +131,9 @@ class PdfViewerActivity : AppCompatActivity(), OnDrawListener, OnTapListener {
             .show()
     }
 
+    /**
+     * Saves the current list of annotations to a JSON file.
+     */
     private fun saveAnnotations() {
         val gson = Gson()
         val json = gson.toJson(annotations)
@@ -115,6 +148,12 @@ class PdfViewerActivity : AppCompatActivity(), OnDrawListener, OnTapListener {
         }
     }
 
+    /**
+     * Loads annotations from a JSON file.
+     *
+     * @param fileName The name of the file from which to load the annotations.
+     * @return A list of PdfAnnotation objects. Returns an empty list if the file doesn't exist or an error occurs.
+     */
     private fun loadAnnotations(fileName: String): List<PdfAnnotation> {
         try {
             val file = File(filesDir, "${getFileName()}_annotations.json")
@@ -129,6 +168,12 @@ class PdfViewerActivity : AppCompatActivity(), OnDrawListener, OnTapListener {
         return emptyList()
     }
 
+    /**
+     * Generates a unique file name for the current book using a SHA-256 hash.
+     * This is used for storing and retrieving annotations and notes specific to the book.
+     *
+     * @return A SHA-256 hash of the book's URI or title.
+     */
     private fun getFileName(): String {
         val name = if (bookUriString != null) bookUriString else bookTitle
         return Utils.sha256(name!!)
